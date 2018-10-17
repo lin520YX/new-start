@@ -8,115 +8,139 @@
 // 状态是panding 要把函数存起来 确定之后在执行
 // 如果出现异常 变成失败的状态
 function Promise(executor){
-    let _this=this;
-    // 初始状态为pending
-    _this.status = 'pending';
-    _this.value='undefined';
-    _this.reason='undefined';
-    _this.onfilfulled=[]; //存resolve 执行的函数
-    _this.onrejected =[]; //存reject 执行的函数
-    function resolve(value){
-        if(_this.status=='pending'){
-            _this.value = value;
-            _this.status=='resolve'
-            _this.onfilfulled.forEach(element => {
-                element()
-            });
-        }
-    }
-    function reject(reason){
-        if(_this.status=='pending'){
-            _this.reason=reason;
-            _this.status=='reject';
-            _this.onrejected.forEach(element => {
-                element()
-            });
-        }
-    }
-   try {
-        executor(resolve,reject)
-   } catch (error) {
-       reject(e)
-   }
+	// 执行一个构造器，调用就执行
+	// 初始状态为pending
+	let _this = this;
+	_this.status='pending';
+	_this.value=undefined;
+	_this.reason = undefined;
+	_this.resolveArr=[];
+	_this.rejected=[];
+	function resolve(val){
+		if(_this.status == 'pending'){
+			_this.value=val;
+			_this.status ='resolved';
+			_this.resolveArr.forEach(fn=>fn())
+		}
+	}
+	function reject(reason){
+		if(_this.status == 'pending'){
+			_this.reason=reason;
+			_this.status ='rejected'
+			_this.rejected.forEach(fn=>fn())
+		}
+	}
+	console.log(executor)
+	executor(resolve,reject)
 }
-/**
- * @description 返回一个promise 
- */ 
-function judgePromise(promise,x,resolve,reject){
-    if(promise==x){
-        throw new Error('循环了');
-    }
-    if(x!=null&&(typeof x=='object'||typeof x =='function')){
-        try {
-            let then = x.then;
-            if(typeof then == 'function'){
-                then.call(x,(x)=>{
-                    judgePromise(promise,x,resolve,reject)
-                },e=>{
-                    reject(e)
+function judgePromise(promise,x,resolve,resolve ){
+	if(x== promise){
+		throw new Error('循环');
+	}
+	if(x!=null&&(typeof x =='function'||typeof x =='object')){
+        let then =x.then;
+        let call
+		try{
+            if(typeof then == 'function'){// 是promise
+                then.call(x,function (y) {
+                    if(!called){ // 不让用户既调用成功又调用失败
+                        called = true
+                      }else{
+                        return
+                      }
+                  resolve(y);
+                },function (r) {
+                    if(!called){ // 不让用户既调用成功又调用失败
+                        called = true
+                      }else{
+                        return
+                      }
+                  reject(r);
                 })
-            }else{
-                // 对象
-                resolve(x);
+            } else { // {then:123}
+            if(!called){ // 不让用户既调用成功又调用失败
+                called = true
+              }else{
+                return
+              }
+              resolve(x);
             }
-        } catch (error) {
-            reject(err);
-        }
-    }else{
-        // const
-        resolve(x);
-    }
+		}catch(e){
+            if(!called){ // 不让用户既调用成功又调用失败
+                called = true
+              }else{
+                return
+              }
+			reject(e)
+		}
+	}else{
+		resolve(x)
+	}
 }
-Promise.prototype.then=function(onfilfulled,onrejected){
-    let _this =this;
-    onfilfulled = typeof onfilfulled ==='function'?onfilfulled:val=>val;
-    onrejected =  typeof onrejected ==='function'?onrejected:err=>{throw new Error(err)};
-    let promise2 = new Promise((resolve,reject)=>{
-        if(_this.status=='resolve'){
-            // 用settime实现异步操作
-            setTimeout(()=>{
-                try {
-                    let x = onfilfulled(_this.value);
-                    judgePromise(promise2,x,resolve,reject)
-                } catch (error) {
-                    reject(error)
-                }
-            })
+Promise.all=function(promises){
+    return new Promise(()=>{
+        let currentIndex =0;
+        let arr =[];
+        function process(index,value){
+            arr[index]=value;
+            currentIndex++;
+            if(currentIndex>=promises.length){
+                resolve(arr);
+            }
         }
-        if(_this.status=='reject'){
-            setTimeout(()=>{
-                try {
-                    let x = onreject(_this.reason);
-                    judgePromise(promise2,x,resolve,reject)
-                } catch (error) {
-                    reject(error)
-                }
-            })
+        for(let i=0;i<promises.length;i++){
+            promises[i].then(function(data){
+                process(i,data)
+            },reject)
         }
-        if(_this.status=='pending'){
-            setTimeout(()=>{
-                _this.onfilfulled.push(function(){
-                    try {
-                        let x = onfilfulled(_this.value);
-                        judgePromise(promise2,x,resolve,reject)
-                    } catch (error) {
-                        reject(error)
-                    }
-                })
-            })
-            setTimeout(()=>{
-                _this.onfilfulled.push(function(){
-                    try {
-                        let x = onreject(_this.reason);
-                        judgePromise(promise2,x,resolve,reject)
-                    } catch (error) {
-                        reject(error)
-                    }
-                })
-            })
-        }
-
     })
-    return promise2
+  
+}
+Promise.prototype.then = function(onfulfilled,onrejected) {
+	let _this = this;
+	onfulfilled= typeof onfulfilled =='function'?onfulfilled:val=>val;
+	onrejected=typeof onrejected=='function'?onrejected:err=>{
+		throw new Error(err)
+	}
+	let promise2 =new Promise((resolve,reject)=>{
+		if(_this.status == 'resolved'){
+			try{
+				let x=onfulfilled(_this.value)
+				judgePromise(promise2,x,resolve,reject)
+			}catch(e){
+				reject(e)
+			}
+		}
+		if(_this.status == 'rejected'){
+
+			try{
+				let x=onrejected(_this.reason)
+				judgePromise(promise2,x,resolve,reject)
+			}catch(e){
+				reject(e)
+			}
+		}
+		if(_this.status == 'pending'){
+			_this.resolveArr.push(function(){
+
+				try{
+					let x=onfulfilled(_this.value)
+					judgePromise(promise2,x,resolve,reject)
+				}catch(e){
+					reject(e)
+				}
+			})
+
+			_this.rejected.push(function(){
+				try{
+					let x=onrejected(_this.reason)
+					judgePromise(promise2,x,resolve,reject)
+				}catch(e){
+					reject(e)
+				}
+			})
+		}
+	})
+	return promise2
 }
 module.exports = Promise
