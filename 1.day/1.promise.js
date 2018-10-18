@@ -30,7 +30,6 @@ function Promise(executor){
 			_this.rejected.forEach(fn=>fn())
 		}
 	}
-	console.log(executor)
 	executor(resolve,reject)
 }
 function judgePromise(promise,x,resolve,resolve ){
@@ -142,5 +141,13 @@ Promise.prototype.then = function(onfulfilled,onrejected) {
 		}
 	})
 	return promise2
+}
+Promise.defer= Promise.deferrd=function(){
+    let dfd={}
+    dfd.promise= new Promise((resolve,reject)=>{
+        dfd.resolve=resolve
+        dfd.reject = reject
+    })
+    return dfd;
 }
 module.exports = Promise

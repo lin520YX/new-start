@@ -1,8 +1,6 @@
 let promise = require('./1.promise')
 new promise((resolve,reject)=>{
-    resolve(new promise((resolve,reject)=>{
-        resolve(1)
-    }))
+    resolve('hello')
 }).then((val)=>{
     console.log(val)
 })
