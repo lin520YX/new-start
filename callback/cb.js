@@ -23,3 +23,9 @@ function read(cb){
 read(function(r){
     console.log(r)
 })
+
+// 文件读取
+let fs = require('fs');
+fs.readFile('./1.txt','utf8',(err,data)=>{
+    console.log(data)
+})
