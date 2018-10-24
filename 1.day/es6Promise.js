@@ -1,53 +1,53 @@
 
 
-class MyPromise {
-    static resolvePromise(promise2, x, resolve, reject) {
-        if (promise2 === x) {
-            throw new Error('循环');
-        }
-        let call;
-        if (x != null && (typeof x === 'function' || typeof y === 'object')) {
-            let then = x.then;
-            // situation then 可能是个非函数
-            try {
-                if (typeof then === 'function') {
-                    then.call(x, x => {
-                        if (!call) {
-                            called = true;
-                        } else {
-                            return;
-                        }
-                        resolvePromise(promise2, x, resolve, reject)
-                    }, r => {
-                        if (!call) {
-                            called = true;
-                        } else {
-                            return;
-                        }
-                        resolve(r)
-                    })
-                } else {
+const resolvePromise=(promise2, x, resolve, reject) => {
+    if (promise2 === x) {
+        throw new Error('循环');
+    }
+    let call;
+    if (x != null && (typeof x === 'function' || typeof y === 'object')) {
+        let then = x.then;
+        // situation then 可能是个非函数
+        try {
+            if (typeof then === 'function') {
+                then.call(x, x => {
                     if (!call) {
                         called = true;
                     } else {
                         return;
                     }
-                    resolve(x)
-                }
-            } catch (error) {
+                    resolvePromise(promise2, x, resolve, reject)
+                }, r => {
+                    if (!call) {
+                        called = true;
+                    } else {
+                        return;
+                    }
+                    resolve(r)
+                })
+            } else {
                 if (!call) {
                     called = true;
                 } else {
                     return;
                 }
-                reject(error)
+                resolve(x)
             }
-
-        } else {
-            resolve(x)
+        } catch (error) {
+            if (!call) {
+                called = true;
+            } else {
+                return;
+            }
+            reject(error)
         }
-    }
 
+    } else {
+        resolve(x)
+    }
+}
+
+class MyPromise {
     static resolve(x) {
         return new MyPromise((resolve) => {
             resolve(x);
@@ -99,7 +99,7 @@ class MyPromise {
                     try {
                         let x = onfilfulled(this.value);
                         console.log(x)
-                        MyPromise.resolvePromise(promise2, x, resolve, reject);
+                       resolvePromise(promise2, x, resolve, reject);
                     } catch (error) {
                         console.log(error)
                         reject(error)
@@ -111,7 +111,7 @@ class MyPromise {
 
                     try {
                         let x = onrejected(this.reason);
-                        MyPromise.resolvePromise(promise2, x, resolve, reject);
+                        resolvePromise(promise2, x, resolve, reject);
                     } catch (error) {
                         reject(error)
                     }
@@ -123,7 +123,7 @@ class MyPromise {
                     setTimeout(() => {
                         try {
                             let x = onfilfulled(this.value);
-                            MyPromise.resolvePromise(promise2, x, resolve, reject);
+                            resolvePromise(promise2, x, resolve, reject);
                         } catch (error) {
                             reject(e)
                         }
@@ -134,7 +134,7 @@ class MyPromise {
                     setTimeout(() => {
                         try {
                             let x = onrejected(this.reason);
-                            MyPromise.resolvePromise(promise2, x, resolve, reject);
+                            resolvePromise(promise2, x, resolve, reject);
                         } catch (error) {
                             reject(error)
                         }
