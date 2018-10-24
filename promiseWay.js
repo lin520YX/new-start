@@ -30,3 +30,5 @@ read('name.txt','utf8').then((data)=>{
 },err=>{
     console.log(err)
 })
+
+console.log(Buffer.from('珠'))
