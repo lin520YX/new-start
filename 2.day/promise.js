@@ -32,7 +32,24 @@ function MyPromise(executor){
 }
 function resolvePromise(promise2,x,resolve,reject){
     if(promise2==x){
-        throw new Error('循环')
+        return reject(new TypeError('循环'));
+    }
+    if(x!=null&&(typeof x ==='function'||typeof x === 'objext')){
+        try {
+            let then = x.then;
+            if(typeof then ==='function' ){
+                then.call(x,y=>{
+                    resolve(y);
+                    resolvePromise(promise2,y,resolve,reject)
+                },reject)
+            }else{
+                resolve(x);
+            }
+        } catch (error) {
+            reject(e);
+        }
+    }else{
+        resolve(x)
     }
 }
 MyPromise.prototype.then=function(onfulfilled,onrejected){
@@ -43,17 +60,21 @@ MyPromise.prototype.then=function(onfulfilled,onrejected){
         // 看一看是不是promise 如果是就让promise 执行 取到最终的promise的结果返回成功和失败
         // 如果x是普通值就让promise返回成功
         let x = onfulfilled(self.value);
+        resolvePromise(promise2,x,resolve,reject)
     }
     if(self.status=='rejected'){
-        onrejected(self.reason);
+        let x = onrejected(self.reason);
+        resolvePromise(promise2,x,resolve,reject)
     }
     // executor 中存在异步操作 发布订阅
     if(self.status=== 'pending'){
         self.onfulfilledArr.push(()=>{
-            onfulfilled(self.value)
+            let x =onfulfilled(self.value)
+            resolvePromise(promise2,x,resolve,reject)
         })
         self.onrejectedArr.push(()=>{
-            onrejected(self.reason);
+            let x =onrejected(self.reason);
+            resolvePromise(promise2,x,resolve,reject)
         })
     }
    })
