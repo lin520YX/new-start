@@ -34,6 +34,11 @@ function resolvePromise(promise2,x,resolve,reject){
     if(promise2==x){
         throw new Error('循环')
     }
+    if(x!=null&&(typeof x ==='function'||typeof x ==='object')){
+        
+    }else{
+        resolve(x)
+    }
 }
 MyPromise.prototype.then=function(onfulfilled,onrejected){
    let promise2 = new MyPromise((resolve,reject)=>{
