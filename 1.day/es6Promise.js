@@ -165,6 +165,7 @@ class MyPromise {
             for (let i = 0; i < promises.length; i++) {
                 promises[i].then((val) => {
                     process(i, val)
+                    // 外层reject
                 }, reject)
             }
         })

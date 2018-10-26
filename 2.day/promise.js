@@ -51,6 +51,11 @@ function resolvePromise(promise2,x,resolve,reject){
     }else{
         resolve(x)
     }
+    if(x!=null&&(typeof x ==='function'||typeof x ==='object')){
+        
+    }else{
+        resolve(x)
+    }
 }
 MyPromise.prototype.then=function(onfulfilled,onrejected){
    let promise2 = new MyPromise((resolve,reject)=>{
