@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    #box .box{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: red;
+        position: absolute;
+    }
+    .box1{
+        top:100px;
+    }
+    .box2{
+        top:200px;
+    }
+    .box3{
+        top:300px;
+    }
+</style>
+<body>
+    <div id="box">
+        <div class="box box1"></div>
+        <div class="box box2"></div>
+        <div class="box box3"></div>
+    </div>
+    <script>    
+        let $= document.querySelector.bind(document);
+        // function move(ele,target,callback){
+        //     let left = 0;
+        //     let timer = setInterval(()=>{
+        //         if(left>target){
+        //             clearInterval(timer);
+        //             callback()
+        //             return;
+        //         }
+        //         left++;
+        //         ele.style.left = left +'px'
+        //     },13)
+        // }
+        // 不方便维护
+        // move($('.box1'),500,function(){
+
+        // })
+        // promise
+        // function move(ele,target){
+        //     return new Promise((resolve,reject)=>{
+        //         let left = 0;
+        //         let timer = setInterval(()=>{
+        //             if(left>target){
+        //                 clearInterval(timer);
+                        
+        //                 return resolve()
+        //             }
+        //             left++;
+        //             ele.style.left = left +'px'
+        //         },13)
+        //     })
+        // }
+        // move($('.box1'),500).then(()=>{
+        //     return move($('.box2'),500)
+        // }).then(()=>{
+        //     move($('.box3'),500)
+        // })
+
+        // async await
+
+         function move(ele,target){
+            return new Promise((resolve,reject)=>{
+                let left = 0;
+                let timer = setInterval(()=>{
+                    if(left>target){
+                        clearInterval(timer);
+                        
+                        return resolve()
+                    }
+                    left++;
+                    ele.style.left = left +'px'
+                },13)
+            })
+        }
+        move($('.box1'),500).then(()=>{
+            return move($('.box2'),500)
+        }).then(()=>{
+            move($('.box3'),500)
+        })
+
+    </script>
+</body>
+</html>
