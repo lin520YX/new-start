@@ -27,5 +27,10 @@ let bluebird={
                 })
             })
         }
+    },
+    promisifyAll(obj){
+        for(let key in obj){
+            obj[key+'Async']=this.promisify(obj[key]);
+        }
     }
 }

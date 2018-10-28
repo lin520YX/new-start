@@ -49,27 +49,27 @@
 
         // })
         // promise
-        // function move(ele,target){
-        //     return new Promise((resolve,reject)=>{
-        //         let left = 0;
-        //         let timer = setInterval(()=>{
-        //             if(left>target){
-        //                 clearInterval(timer);
+        function move(ele,target){
+            return new Promise((resolve,reject)=>{
+                let left = 0;
+                let timer = setInterval(()=>{
+                    if(left>target){
+                        clearInterval(timer);
                         
-        //                 return resolve()
-        //             }
-        //             left++;
-        //             ele.style.left = left +'px'
-        //         },13)
-        //     })
-        // }
+                        return resolve()
+                    }
+                    left++;
+                    ele.style.left = left +'px'
+                },13)
+            })
+        }
         // move($('.box1'),500).then(()=>{
         //     return move($('.box2'),500)
         // }).then(()=>{
         //     move($('.box3'),500)
         // })
 
-        // async await
+        // promise
 
          function move(ele,target){
             return new Promise((resolve,reject)=>{
@@ -85,11 +85,62 @@
                 },13)
             })
         }
-        move($('.box1'),500).then(()=>{
-            return move($('.box2'),500)
-        }).then(()=>{
-            move($('.box3'),500)
+        // move($('.box1'),500).then(()=>{
+        //     return move($('.box2'),500);
+        // }).then(()=>{
+        //     return move($('.box3'),500);
+        // }).then(()=>{
+        //     console.log('ok')
+        // })
+
+        // generator
+        // 用的时候 yeild 暂停一个函数被分割若干份
+        // function * gen(){
+        //    let a= yield move($('.box1'),500);
+        //    console.log(a)
+        //    let b= yield move($('.box2'),500);
+        //    console.log(b)
+        //    let c= yield move($('.box3'),500);
+        //    console.log(c)
+        //    return undefined
+        // }
+        // let i =0
+        // function co(it){
+        //     return new Promise((resolve,reject)=>{
+        //         function next(val){
+        //             let {value,done}=it.next(val);
+        //             if(!done){
+        //                 value.then(()=>{
+        //                 next(++i)
+        //               })
+        //             }else{
+        //                 reject()
+        //             }
+        //         }
+        //         next()
+        //     })
+        // }
+        // co(gen()).then((a)=>{
+        //     console.log(a)
+        // })
+
+        // 4async + await
+        // 1 callback 问题
+        // 2.异步方法不能捕获一场的问题
+        // 3.代码更像同步执行
+        // 4.await 要搭配async
+
+        async function gen(){
+            let a = await move($('.box1'),500);
+            let b = await 1;
+            let c = await move($('.box2'),500)
+            let d = await move($('.box3'),500)
+            return b;
+        }
+        gen().then((a)=>{
+            console.log(b)
         })
+
 
     </script>
 </body>
