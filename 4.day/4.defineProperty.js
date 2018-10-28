@@ -24,3 +24,34 @@ let obj ={
     }
 }
 obj.PI
+
+function update(){
+    console.log('gx')
+}
+function observer(obj){
+    if(typeof obj!=='object'){
+       return obj;
+    }
+    for(let key in obj){
+        defineReactive(obj,key,obj[key]);
+    }
+}
+// 对象中的所有属性都采用object.defineProperty 来定义
+function defineReactive(obj,key,value){
+    observer(value)
+    Object.defineProperty(obj,key,{
+        get(){
+            return value
+        },
+        set(val){
+           update()
+           if(value!=val)value=val;
+        }
+    })
+}
+let obj={name:111}
+observer(obj);
+obj.name=100;
+console.log(obj.name);
+
+
