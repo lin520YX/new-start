@@ -28,3 +28,22 @@ function deepClone(obj){
     }
     return newObj
 }
+
+// Object.assign(obj,obj1)
+
+
+// 数组展开 拼接数组
+// [1,2].concat([3,4,5])
+
+let arr1 = [1,2];
+let arr2 = [3,4];
+console.log([...arr1,...arr2])
+
+console.log(Math.max(...arr1))
+// Math.max.apply(Math,arr1)
+
+
+function sum(...arg){
+    return eval(arg.join('+'))
+}
+sum([1,2,3]);
