@@ -1,0 +1,17 @@
+{
+  "name": "4.day",
+  "version": "1.0.0",
+  "description": "",
+  "main": "1.let&&const.js",
+  "scripts": {
+    "dev": "babel 8.class.js -o new.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0"
+  }
+}
