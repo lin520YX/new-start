@@ -23,3 +23,12 @@ Buffer.prototype.copy=function(target ,targets,sources,sourcee ){
     }
 }
 
+Buffer.concat=function(lists,length=lists.reduce((prev,next)=>prev+next.length,0)){
+    let buffer = Buffer.alloc(length);
+    let offset =0;
+    for(let i =0 ;i<lists.length;i++){
+        lists[i].copy(buffer,offset,0,lists[i].length)
+        offset += lists[i].length;
+    }
+    return buffer.slice(0,offset);
+}
