@@ -16,9 +16,9 @@ let fs = require('fs');
 
 // 写
 let fs = require('fs');
-fs.open('1.txt','w',(err,fd)=>{
+fs.open('1.txt', 'w', (err, fd) => {
     let buffer = Buffer.from('云富');
-    fs.write(fd,buffer,1,3,0,(err,written)=>{
+    fs.write(fd, buffer, 0, 6, 0, (err, written) => {
         console.log(written)
         // 更新内存
         // fs.fsync();
