@@ -37,3 +37,4 @@ function mkdir(path,callback){
     }
     next()
 }
+mkdir('m/q/d',()=>{})
