@@ -32,3 +32,21 @@ Buffer.concat=function(lists,length=lists.reduce((prev,next)=>prev+next.length,0
     }
     return buffer.slice(0,offset);
 }
+
+// indexOf
+console.log(Buffer.from('林云富').indexOf('云'))
+// buffer 中没有切割的方法
+
+Buffer.prototype.split=function(sep){
+    let arr=[];
+    let position=0;
+    let length = Buffer.from(sep).length;
+    let offset=0;
+    while(-1!=(offset=this.indexOf(sep,position))){
+        arr.push(this.slice(position,offset));
+        position =offset+length;
+    }
+    arr.push(this.slice(position));
+    return arr;
+}
+console.log(Buffer.from('林云富').split('云').toString())
