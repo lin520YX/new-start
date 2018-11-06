@@ -8,6 +8,7 @@ function copy(source, target) {
         // 打开目标文件
         fs.open(target, 'w',function (err, wfd){
             let buffer = Buffer.alloc(BUFFER_SIZE);
+            // 读取文件的长度
             function next() {
                 fs.read(rfd, buffer, 0, BUFFER_SIZE, null, (err, bytesRead) => {
                     fs.write(wfd, buffer, 0, bytesRead, null, (err, written) => {
