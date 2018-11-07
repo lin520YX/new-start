@@ -23,16 +23,16 @@ let path = require('path')
 //     }
 // }
 // removeDepSync('m')
-
+// parell
 function removeDep(p, cb) {
     fs.stat(p, function (err, statObj) {
         //    判断是文件夹还是文件
         if (statObj.isDirectory()) {
             /**
              * 第一次 next 执行走的是removeDep 第二次执行的是第二个 第三次 走的是第一次removeDep
-             */ 
+             */
             fs.readdir(p, function (err, dirs) {
-                dirs = dirs.map(d => path.join(p, d));
+                dirs = dirs.map(d => path.join(p, d));//['m/n','m/b']
                 function next(index) {
                     if (index === dirs.length) return fs.rmdir(p, cb);
                     let currentPath = dirs[index];
@@ -54,3 +54,34 @@ function removeDep(p, cb) {
 
 // 2.同步版：fs.statSync(path)
 //    只接收一个path变量，fs.statSync(path)其实是一个fs.stats的一个实例；
+
+
+function removeDepParell(p, cb) {
+    fs.stat(p, function (err, statObj) {
+        //    判断是文件夹还是文件
+        if (statObj.isDirectory()) {
+            /**
+             * 第一次 next 执行走的是removeDep 第二次执行的是第二个 第三次 走的是第一次removeDep
+             */
+            fs.readdir(p, function (err, dirs) {
+                if (dirs.length > 0) {
+                    let index = 0;
+                    function done() {
+                        index++;
+                        if (index === dirs.length) {
+                            fs.rmdir(p, cb)
+                        }
+                    }
+                    dirs.forEach(d => {
+                        removeDepParell(d, done);
+                    })
+                    // 并行删除
+                } else {
+                    fs.rmdir(p, cb);
+                }
+            })
+        } else {
+            fs.unlink(p, cb);
+        }
+    });
+}
