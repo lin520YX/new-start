@@ -2,11 +2,12 @@ function EventEmitter(){
     this._events =Object.create(null);
 }
 EventEmitter.prototype.on=function(eventName,callback){
-    if(eventName=='newListener'){
+    if(eventName!='newListener'){
+        // fn 指代 callback 的名字
         return this._events['newListener'].forEach(fn=>{
             fn(eventName)
         })
-    }
+    } 
     if(!this._events){
         this._events =Object.create(null);
     }
@@ -22,7 +23,7 @@ EventEmitter.prototype.emit=function(eventName,...args){
     });
 }
 EventEmitter.prototype.off=function(eventName,callback){
-    this._events[eventName]=this._events[eventName].filter((l=>l!=eventName&&l.l!=callback));
+    this._events[eventName]=this._events[eventName].filter((l=>l!=callback&&l.l!=callback));
 }
 EventEmitter.prototype.once=function(eventName,callback){
     function one(...params){

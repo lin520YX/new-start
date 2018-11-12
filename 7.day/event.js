@@ -15,12 +15,13 @@ girl.on('newListener',function(type){
     // process.nextTick(()=>{
     //     girl.emit('sl')
     // })
+    console.log(type)
 })
-let cry = function cry(){console.log('cry')};
-let eat = function cry(){console.log('eat')};
+let cry = function cry(){};
+let eat = function cry(){};
 girl.on('sl',cry);
 girl.on('sl',eat);
-girl.emit('sl');//发布的方法
+// girl.emit('sl');//发布的方法
 
 
 
