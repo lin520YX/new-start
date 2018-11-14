@@ -23,6 +23,24 @@ class ReadStream extends EventEmitter {
             }
         })
     }
+    pause(){
+        this.flowing = false;
+    }
+    resume(){
+        this.flowing = true;
+        this.read();
+    }
+    pipe(ws){
+        this.on('data',(data)=>{
+              let flag =  ws.write(data);
+              if(!flag){
+                this.pause();
+              }
+        })
+        ws.on('drain',()=>{
+            this.resume()
+        })
+    }
     open() {
         fs.open(this.path, this.flags, (err, fd) => {
             if (err) {
