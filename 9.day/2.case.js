@@ -3,7 +3,7 @@ let ws =fs.createWriteStream('3.txt',{
     flags:'w',
     encoding:'utf8',
     autoClose:true,
-    highWaterMark:200 //预计我用16k来写
+    highWaterMark:1 //预计我用16k来写
 })
 let i =0;
 let flag = true;
@@ -14,7 +14,7 @@ function write(){
 }
 write();
 ws.on('drain',()=>{
-    console.log(0)
+    console.log('a')
     flag = true;
     write()
 });
