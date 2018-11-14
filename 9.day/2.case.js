@@ -1,5 +1,5 @@
 let fs = require('fs');
-let ws =fs.createWriteStream('2.txt',{
+let ws =fs.createWriteStream('3.txt',{
     flags:'w',
     encoding:'utf8',
     autoClose:true,

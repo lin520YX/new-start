@@ -68,11 +68,6 @@ class WriteStream extends EventEmitter {
         if (flag) {
             this.needDrain = true;
         }
-        if (typeof this.fd !== 'number') {
-            return this.once('open', () => this.write(chunk,
-                encoding,
-                callback))
-        }
         // 第一次往里面写
         if (this.write) {
             this.cache.push({
@@ -89,9 +84,14 @@ class WriteStream extends EventEmitter {
                 () => this.clearBuffer()
             );// 实现
         }
-        return !flag;
+        return this.len < this.highWaterMark;
     }
     _write(chunk,encoding, callback) {
+        if (typeof this.fd !== 'number') {
+            return this.once('open', () => this._write(chunk,
+                encoding,
+                callback))
+        }
         fs.write(this.fd,chunk,0,chunk.length,this.pos,(err,written)=>{
             // written 当前写入的个数
             // 每次调用 都记录当前缓存区的总大小 完成之后 还要将缓存区减少
@@ -108,8 +108,8 @@ class WriteStream extends EventEmitter {
         }else{
             // 缓存区空了 
             if(this.needDrain){ //应该写入文件中
-                this.writing = false;
-                this.needDrain = false;
+                this.writing = false; // 缓存区干了下一次再写入的时候应该写入到文件中
+                this.needDrain = false; // 下次再写入时 要重新触发drain事件
                 this.emit('drain')
             }
         }
