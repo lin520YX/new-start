@@ -3,17 +3,18 @@ let ws =fs.createWriteStream('2.txt',{
     flags:'w',
     encoding:'utf8',
     autoClose:true,
-    highWaterMark:1 //预计我用16k来写
+    highWaterMark:200 //预计我用16k来写
 })
 let i =0;
 let flag = true;
 function write(){
-    while(i<=9 &&flag){
+    while(i<=19 &&flag){
         flag=ws.write(i++ +'');
     }
 }
 write();
 ws.on('drain',()=>{
+    console.log(0)
     flag = true;
     write()
-})
+});
