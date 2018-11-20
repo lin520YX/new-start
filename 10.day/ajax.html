@@ -9,5 +9,15 @@
 <body>
     <!-- ajax 默认有跨域问题 -->
     hello
+    <!-- 原生ajax fetch axios -->
+    <script>
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET','/reg',true);
+        xhr.setRequestHeader('Content-Type','application/json');
+        xhr.onload =function(){
+            console.log(xhr.response)
+        }
+        xhr.send('{"name":"linyunfu"}')
+    </script>
 </body>
 </html>
