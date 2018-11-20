@@ -2,6 +2,9 @@ let http = require('http');
 let fs = require('fs');
 let path = require('path');
 let url = require('url');
+
+
+let mime = require('mime');
 // let obj =url.parse('http://www.baidu.com:8080/s?a=1');
 // console.log(obj)
 // Url {
@@ -31,7 +34,8 @@ http.createServer(function(req,res){
                     let str  = Buffer.concat(arr).toString();
                     console.log(str)
                   let obj =  require('querystring').parse(str);
-                  res.setHeader('Content-Type','application/json;charset=utf8')
+                  
+                  res.setHeader('Content-Type',mime.getType(realpath)+';charset=utf8')
                   res.end(JSON.stringify(obj))
                 })
             }
@@ -50,3 +54,8 @@ http.createServer(function(req,res){
 }).listen(3000,function(){
     console.log('300 start');
 });
+
+
+// mime
+// let mime = require('mime');
+// console.log(mime.getType('1.http.js'))
