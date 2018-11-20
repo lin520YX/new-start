@@ -20,38 +20,49 @@ let mime = require('mime');
 //     pathname: '/s',
 //     path: '/s?a=1',
 //     href: 'http://www.baidu.com:8080/s?a=1' }
-http.createServer(function(req,res){
-    let {pathname} = url.parse(req.url);
-    let realpath = path.join(__dirname,pathname);
-    fs.access(realpath,(err)=>{
-        if(err){
-            if(pathname === '/login'){
-                let arr =[];
-                req.on('data',(data)=>{
+http.createServer(function (req, res) {
+    let { pathname } = url.parse(req.url);
+    let realpath = path.join(__dirname, pathname);
+    fs.access(realpath, (err) => {
+        if (err) {
+            if (pathname === '/login') {
+                let arr = [];
+                req.on('data', (data) => {
                     arr.push(data)
                 })
-                req.on('end',()=>{
-                    let str  = Buffer.concat(arr).toString();
-                    console.log(str)
-                  let obj =  require('querystring').parse(str);
-                  
-                  res.setHeader('Content-Type',mime.getType(realpath)+';charset=utf8')
-                  res.end(JSON.stringify(obj))
+                req.on('end', () => {
+                    let str = Buffer.concat(arr).toString();
+                    let obj = require('querystring').parse(str);
+                    res.setHeader('Content-Type', 'application/json;charset=utf8')
+                    res.end(JSON.stringify(obj))
                 })
             }
-        }else{
+        } else {
             // 静态文件
-            res.setHeader('Content-Type','text/html;charset=utf8');
-            return fs.createReadStream(realpath).pipe(res)
+            // 如果是一个 文件 不要马上读取
+            fs.stat(realpath, (err, statObj) => {
+                if (statObj.isFile()) {
+                    res.setHeader('Content-Type', mime.getType(realpath) + ';charset=utf8');
+                    return fs.createReadStream(realpath).pipe(res)
+                } else {
+                    let r = path.join(realpath, 'index.html');
+                    fs.access(r, (err) => {
+                        if (err) return res.end('NOtFound')
+                        res.setHeader('Content-Type', 'text/html;charset=utf8');
+                        fs.createReadStream(r).pipe(res)
+                    })
+                }
+            })
+
         }
-      
+
     });
     // if(req.url=== '/ajax.html'){
     //     res.setHeader('Content-Type','text/html;charset=utf8');
     //     return fs.createReadStream(path.resolve(__dirname,'ajax.html')).pipe(res)
     // }
-    
-}).listen(3000,function(){
+
+}).listen(3000, function () {
     console.log('300 start');
 });
 
