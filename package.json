@@ -19,6 +19,7 @@
   "homepage": "https://github.com/lin520YX/new-start#readme",
   "dependencies": {
     "bluebird": "^3.5.2",
+    "http-proxy": "^1.17.0",
     "koa": "^2.6.2",
     "koa-router": "^7.4.0",
     "mime": "^2.3.1",
