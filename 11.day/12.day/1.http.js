@@ -32,6 +32,7 @@ let server = http.createServer((req, res) => {
     }
     let realpath = path.join(__dirname, pathname);
     fs.stat(realpath, (err,statObj) => {
+        console.log(statObj)
         res.setHeader('Last-Modified',statObj.ctime.toGMTString());
         let ctime= req.headers['if-modified-since'];
         console.log(req.headers)
