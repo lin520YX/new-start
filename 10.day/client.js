@@ -7,7 +7,7 @@ let client = http.request({
     port:3000,
     path:'/user',
     headers:{
-        name:'zfpx',
+        name:'lyf',
         'Content-Type':'application/x-www-form-urlencoded'
     }
 },function(res){
