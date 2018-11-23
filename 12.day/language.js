@@ -13,14 +13,21 @@ let defaultLanguage = 'en';
 let http = require('http');
 http.createServer((req,res)=>{
     let l = req.headers['accept-language'];
+    res.setHeader('Content-Type','text/plain;charset=utf8');
     if(l){
       let arr =  l.split(',').map(item=>{
           let [lan,q="q=1"] = item.split(';')
           return{name:lan,q:Number(q.split('=')[1])}
         }).sort((a,b)=>{
-            return a.q-b.q
+            return b.q-a.q
         })
-        console.log(arr)
+        for (let index = 0; index < arr.length; index++) {
+            let l = arr[index].name;
+            if(languages[l]){
+                return res.end(languages[l])
+            }
+        }
+        res.end(languages[defaultLanguage]);
     }else{
         res.end(languages[defaultLanguage]);
     }

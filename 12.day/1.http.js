@@ -13,6 +13,7 @@ let path = require('path');
 let url = require('url');
 let fs = require('fs');
 let port = 3000;
+let crypto = require('crypto');
 let server = http.createServer((req, res) => {
     let {pathname} = url.parse(req.url);
 
@@ -36,14 +37,20 @@ let server = http.createServer((req, res) => {
         return;
     }
     fs.stat(realpath, (err,statObj) => {
-        console.log(statObj['ctime'].toGMTString())
-        res.setHeader('Last-Modified',statObj['ctime'].toGMTString());
-        let ctime= req.headers['if-modified-since'];
-        if(ctime === statObj.ctime.toGMTString()){
+        // console.log(statObj['ctime'].toGMTString())
+        // res.setHeader('Last-Modified',statObj['ctime'].toGMTString());
+        // let ctime= req.headers['if-modified-since'];
+        // if(ctime === statObj.ctime.toGMTString()){
+        //     res.statusCode=304;
+        //     res.end();
+        // }else{
+        //     fs.createReadStream(realpath).pipe(res);
+        // }
+       let etag = crypto.createHash('md5').update(fs.readFileSync(realpath)).digest('base64');
+        res.setHeader('Etag',etag) // 永问价大小 来代替etag
+        if(etag === req.headers['if-none-match']){
             res.statusCode=304;
             res.end();
-        }else{
-            fs.createReadStream(realpath).pipe(res);
         }
         if (err) return res.statusCode = 404, res.end()
         fs.createReadStream(realpath).pipe(res);
