@@ -55,8 +55,9 @@ class Server {
     }
     sendFile(req, res, statObj, realPath) {
         console.log(realPath)
+        // 下次更新内容
         // 缓存 304  强制缓存 + 对比缓存
-    // 206 范围请求   range的实现
+        // 206 范围请求   range的实现
         let gizp;
         res.setHeader('Content-type', mime.getType(realPath) + ';charset=utf8');
         if (gizp = this.gzip(req, res)) {
@@ -82,12 +83,16 @@ class Server {
     start() {
         let server = http.createServer(this.handleRequest.bind(this));
         let { port, host } = this.config;
-        server.listen(port, host, () => {
-            debug(`http://${host}:${chalk.red(port)} sever start`);
-        })
+        function _server(){
+            server.listen(port, host, () => {
+                debug(`http://${host}:${chalk.red(port)} sever start`);
+            })
+        }
+        _server()
         server.on('error', (err) => {
             if (err.error === 'EADDRINUSE') {
-                server.listen(++port)
+                ++port
+               _server()
             }
         })
     }
