@@ -142,6 +142,9 @@ Promise.prototype.then = function(onfulfilled,onrejected) {
 	})
 	return promise2
 }
+Promise.prototype.catch=function(errFn){
+	return this.then(null,errFn)
+}
 Promise.defer= Promise.deferrd=function(){
     let dfd={}
     dfd.promise= new Promise((resolve,reject)=>{
