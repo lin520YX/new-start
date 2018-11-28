@@ -3,7 +3,8 @@ let app = new Koa();
 // ctx 上存在req 就是原生的req
 // ctx 上有request 属性 和response 属性是自己封装的
 app.use((ctx)=>{
-    ctx.res.end('1111')
+    ctx.body = 'hello';
+    console.log(ctx.response.body)
     console.log(ctx.req.url)
     console.log(ctx.request.req.url);
     console.log(ctx.request.path);

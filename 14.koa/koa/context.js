@@ -2,17 +2,17 @@ let proto ={
 
 }
 function defineGetter(property,key){
-    proto.__difineGetter__(key,function(){
+    proto.__defineGetter__(key,function(){
         return this[property][key]
     })
 }
 function difineSetter(property,key){
-    proto.__difineSetter__(key,function(value){
+    proto.__defineSetter__(key,function(value){
          this[property][key] = value
     })
 }
 defineGetter('request','path');
 defineGetter('request','url');
-defineGetter('response','body')
-defineSetter('response','body')
+defineGetter('response','body');
+difineSetter('response','body');
 module.exports = proto;

@@ -6,7 +6,7 @@ let response = require('./response');
 class Application extends EventEmitter {
     constructor() {
         super()
-        this.middleware = [];
+        this.middlewares = [];
         this.context = Object.create(context);
         this.request = Object.create(request);
         this.response = Object.create(response);
@@ -24,11 +24,19 @@ class Application extends EventEmitter {
         // 先创建一个context对象
         // 要把所有中间件践行组合
         let ctx = this.createContext(req, res)
-        this.middleware[0](ctx);
+        this.compose(ctx, this.middlewares);
+    }
+    compose(ctx, middlewares) { // promise 逻辑
+        function dispatch(index) {
+            if (index === middlewares.length) return Promise.resolve();
+            let middleware = middlewares[index];
+            return Promise.resolve(middleware(ctx, () => dispatch(index + 1)))
+        }
+        dispatch(0)
     }
     // 中间件方法 用来📱中间件
     use(callback) {
-        this.middleware.push(callback);
+        this.middlewares.push(callback);
     }
     listen(...args) {
         let server = http.createServer(this.handleRequest.bind(this));
