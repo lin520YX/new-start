@@ -6,7 +6,7 @@ app.use((ctx)=>{
     ctx.res.end('1111')
     console.log(ctx.req.url)
     console.log(ctx.request.req.url);
-    console.log(ctx.request.url);
-    console.log(ctx.url); //做了拦截 当我们在ctx 上取值时候 回去 ctx.request 上取值
+    console.log(ctx.request.path);
+    console.log(ctx.path); //做了拦截 当我们在ctx 上取值时候 回去 ctx.request 上取值
 })
 app.listen(3000)
