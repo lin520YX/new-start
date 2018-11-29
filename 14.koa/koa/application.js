@@ -20,7 +20,6 @@ class Application extends EventEmitter {
         ctx.req = ctx.request.req = req;
         ctx.res = ctx.response.res = res;
         return ctx;
-
     }
     handleRequest(req, res) {
         // 先创建一个context对象
@@ -28,29 +27,26 @@ class Application extends EventEmitter {
         let ctx = this.createContext(req, res)
         res.statusCode = 404;
         let p = this.compose(ctx, this.middlewares);
-        p.then((data) => {
+        console.log(JSON.stringify(this.middlewares))
+        p.then(function () {
             let body = ctx.body;
-            if (body instanceof stream) {
-                res.statusCode = 204;
-                res.setHeader('Content-type', 'text/html;charset=utf8');
-                body.pipe(res);
-            } else if (typeof body === 'number') {
-                res.statusCode = 204;
-                res.setHeader('Content-type', 'text/plain;charset=utf8');
-                res.end(body);
-            } else if (typeof body === 'string' || Buffer.isBuffer(body)) {
-                res.statusCode = 204;
-                res.setHeader('Content-type', 'text/plain;charset=utf8');
-                res.end(body);
-            } else if (typeof body === 'object') {
-                res.statusCode = 204;
-                res.setHeader('Content-type', 'application/json;charset=utf8');
-                res.end(JSON.stringify(body));
-            } else {
-                res.statusCode = 200;
-                res.end('Not Found');
+            if (body instanceof stream) { // 先判断流，在判断是不是对象
+              body.pipe(res); // 异步方法
+            }else if(typeof(body) === 'number'){
+              res.setHeader('Content-Type', 'text/plain;charset=utf8');
+              res.end(body.toString());
+            }else if(typeof body == 'object'){
+              res.setHeader('Content-Type','application/json;charset=utf8');
+              res.end(JSON.stringify(body));
+            }else if(typeof body === 'string' || Buffer.isBuffer(body)){
+              res.setHeader('Content-Type', 'text/plain;charset=utf8');
+              res.end(body);
+            }else{
+              res.end(`Not Found`);
             }
-        })
+          }).catch(e=>{
+            this.emit('error',e);
+          });
     }
     compose(ctx, middlewares) { // promise 逻辑
         function dispatch(index) {
@@ -58,7 +54,7 @@ class Application extends EventEmitter {
             let middleware = middlewares[index];
             return Promise.resolve(middleware(ctx, () => dispatch(index + 1)))
         }
-        dispatch(0)
+       return dispatch(0)
     }
     // 中间件方法 用来📱中间件
     use(callback) {
