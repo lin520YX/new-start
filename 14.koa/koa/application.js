@@ -27,12 +27,11 @@ class Application extends EventEmitter {
         let ctx = this.createContext(req, res)
         res.statusCode = 404;
         let p = this.compose(ctx, this.middlewares);
-        console.log(JSON.stringify(this.middlewares))
         p.then(function () {
             let body = ctx.body;
             if (body instanceof stream) { // 先判断流，在判断是不是对象
               body.pipe(res); // 异步方法
-            }else if(typeof(body) === 'number'){
+            }else if(typeof body === 'number'){
               res.setHeader('Content-Type', 'text/plain;charset=utf8');
               res.end(body.toString());
             }else if(typeof body == 'object'){
@@ -54,6 +53,7 @@ class Application extends EventEmitter {
             let middleware = middlewares[index];
             return Promise.resolve(middleware(ctx, () => dispatch(index + 1)))
         }
+        // return 因为 可能第一个 中间件没有使用use 方法
        return dispatch(0)
     }
     // 中间件方法 用来📱中间件

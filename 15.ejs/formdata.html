@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    div{
+      width: 200px;height: 200px;background: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="oDiv">
+    文件拖放处
+  </div>
+  <script>
+    let oDiv = document.getElementById('oDiv');
+    // 当前悬停时的
+    oDiv.addEventListener('dragover', function (e) {
+      this.style.background = 'yellow'
+      e.preventDefault();
+    })
+    // 当前松手时
+    oDiv.addEventListener('drop', function (e) {
+      e.preventDefault();
+      let file = e.dataTransfer.files[0]
+      console.log(file)
+      let file = e.dataTransfer.files[0];
+      let form = new FormData();
+      form.append('avatar', file );
+      form.append('username', '第一个文件');
+      console.log(form);
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST','/upload',true);
+      xhr.onload = function () {
+        alert('上传成功');
+      }
+      xhr.on('error',function(e){
+        alert(JSON.stringify(e))
+      })
+      xhr.send(form);
+    });
+  </script>
+</body>
+</html>
