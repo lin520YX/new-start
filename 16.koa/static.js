@@ -14,6 +14,7 @@ function static(dirname){
                 ctx.set('Content-type','text/html;charset=utf8')
                 ctx.body =  fs.createReadStream(realPath)
             }else{
+                ctx.set('Content-type','text/html;charset=utf8')
                 realPath = path.join(realPath,'index.html');
                 await fs.access(realPath);
                 ctx.body = fs.createReadStream(realPath);
