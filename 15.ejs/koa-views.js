@@ -9,6 +9,7 @@ app.use(views(path.join(__dirname),{
 }));
 router.get('/',async (ctx,next)=>{
     console.log(1)
-    await ctx.render('template.html',{arr:[1,2,3]});
+    await ctx.render('index.ejs',{arr:[1,2,3]});
 });
+app.use(router.routes())
 app.listen(3001)
