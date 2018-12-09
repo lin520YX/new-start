@@ -80,34 +80,51 @@ function Application() {
         }
 
     })
-    
+
     app.listen(function (...args) {
         let server = http.createServer(app);
         server.listen(...args);
     })
 
     //  内置的中间件
-  app.use(function (req, res, next) {
-    let {pathname,query } = url.parse(req.url,true);
-    req.path = pathname;
-    req.query = query;
-    res.sendFile = function (url) {
-      fs.createReadStream(url).pipe(res);
-    }
-    res.send = function (val) {
-      if(typeof val === 'string' || Buffer.isBuffer(val)){
-        res.setHeader('Content-Type','text/plain;charset=utf8');
-        res.end(val);
-      }else if(typeof val =='object'){
-        res.setHeader('Content-Type', 'application/json;charset=utf8');
-        res.end(JSON.stringify(val));
-      }else if(typeof val === 'number'){
-        res.statusCode = val;
-        res.end(require('_http_server').STATUS_CODES[val]);
-      }
-    }
-    next();
-  })
+    app.use(function (req, res, next) {
+        let { pathname, query } = url.parse(req.url, true);
+        req.path = pathname;
+        req.query = query;
+        res.sendFile = function (url) {
+            fs.createReadStream(url).pipe(res);
+        }
+        res.send = function (val) {
+            if (typeof val === 'string' || Buffer.isBuffer(val)) {
+                res.setHeader('Content-Type', 'text/plain;charset=utf8');
+                res.end(val);
+            } else if (typeof val == 'object') {
+                res.setHeader('Content-Type', 'application/json;charset=utf8');
+                res.end(JSON.stringify(val));
+            } else if (typeof val === 'number') {
+                res.statusCode = val;
+                res.end(require('_http_server').STATUS_CODES[val]);
+            }
+        }
+        next();
+    })
     return app;
+}
+
+Application.static = function (pathname) {
+    return function (req,res,next) {
+      let realPath = path.join(pathname,req.path);
+      fs.stat(realPath,function (err,statObj) {
+        if(err){
+          next();
+        }else{
+          if(statObj.isDirectory()){
+            // todo;
+          }else{
+            res.sendFile(realPath);
+          }
+        }
+      })
+    }
 }
 module.exports = Application;
