@@ -29,8 +29,9 @@
 // }
 // render(h1,window.root);
 
-import './history/2.jsx'
-import './history/component'
+// import './history/2.jsx'
+// import './history/4.class'
+import './history/5.setState'
 
 
 
