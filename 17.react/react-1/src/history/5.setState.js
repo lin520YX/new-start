@@ -12,6 +12,7 @@ class Counter extends Component {
         this.setState({
             count: ++this.state.count
         })
+        // this.setState((prev)=>({count:parseInt(prev.count)+1}));
     }
     render() {
         return <h1>{this.state.count}<button onClick={this.handleClick}>+</button></h1>
