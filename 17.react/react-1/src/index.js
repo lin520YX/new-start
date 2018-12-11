@@ -31,7 +31,14 @@
 
 // import './history/2.jsx'
 // import './history/4.class'
-import './history/5.setState'
+// import './history/8.control'
+
+
+import React from 'react';
+import ReactDom from 'react-dom';
+import MessageBox from './components/MessageBox';
+import 'bootstrap/dist/css/bootstrap.css'
+ReactDom.render(<MessageBox/>,window.root);
 
 
 
