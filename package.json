@@ -21,6 +21,7 @@
     "bluebird": "^3.5.2",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "http-proxy": "^1.17.0",
     "koa": "^2.6.2",
     "koa-better-body": "^3.0.4",
