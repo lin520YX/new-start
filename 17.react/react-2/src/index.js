@@ -14,9 +14,12 @@ class Counter extends React.Component{
         number :store.getState().number
     }
     componentDidMount(){
-        store.subscribe(()=>{
+        this.unsub = store.subscribe(()=>{
             this.setState({number:store.getState().number})
         })
+    }
+    componentWillUnmount(){
+        this.unsub()
     }
     render(){
         return <div>
