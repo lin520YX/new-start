@@ -1,42 +1,30 @@
-function createStore(reducer) {
-    let state;
-    let getState = () => state
-    let listens = []
-    let dispatch = (action) => {
-        state = reducer(state, action)
-        listens.forEach(fn => fn())
-    }
-    dispatch({ type: '@INIT' })
-    let subscribe = (fn) => {
-        listens.push(fn)
-        return () => {
-            listens = listens.filter(l => fn !== l);
-        }
-    }
-    return {
-        dispatch,
-        subscribe,
-        getState
-    }
-}
-let initState = {
-    number: 0
-}
-const INCREMENT = 'INCREMENT'
-function reducer(state = initState, action) {
-    switch (action.type) {
-        case INCREMENT:
-        return { number: state.number + action.v };
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore} from 'redux'
+function reducer(state={number:0},action){
+    switch(action.type){
+        case 'ADD':
+        return {number:state.number+action.v}
     }
     return state;
 }
-let render=()=>{
-    window.counter.innerHTML = store.getState().number
-}
-render()
 let store = createStore(reducer);
-store.subscribe(render)
-window.add.addEventListener('click', () => {
-    store.dispatch({type: INCREMENT, v: 1 });
-    window.counter.innerHTML = store.getState().number
-})
+class Counter extends React.Component{
+    state ={
+        number :store.getState().number
+    }
+    componentDidMount(){
+        store.subscribe(()=>{
+            this.setState({number:store.getState().number})
+        })
+    }
+    render(){
+        return <div>
+                {this.state.number}
+                <button onClick={()=>{
+                    store.dispatch({type:'ADD',v:1})
+                }}>+</button>
+        </div>
+    }
+}
+ReactDOM.render(<Counter/>,window.root);
