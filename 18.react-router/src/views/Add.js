@@ -7,6 +7,8 @@ export default class Add extends React.Component{
        localStorage.setItem('users',JSON.stringify(users))
        this.props.history.push('/user/list')
     }
+
+    
     render(){
         console.log(this.props)
         return <div>
