@@ -5,22 +5,18 @@ export default class Route extends React.Component{
     render(){
         return (
             <Consumer>
-                {
-                    (value)=>{
+                {(value)=>{
                         let {location:{pathname}} = value;
-                        console.log(pathname)
+                        // console.log(JSON.stringify(value))
                         let props = {...value}
                         let {path,component:Component,exact=false} = this.props
                         let keys  = [];
                         let reg = pathToRegExp(path,keys,{end:exact})
-                        console.log(reg)
-                        console.log(pathname)
                         if(reg.test(pathname)){
                             return <Component {...props}></Component>
                         }
                         return null
-                    }
-                }
+                }}
             </Consumer>
         )
     }

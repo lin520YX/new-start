@@ -10,16 +10,16 @@ export default class HashRouter extends React.Component {
     componentDidMount() {
         window.location.hash =window.location.hash ? window.location.hash.slice(1) : '/'
         window.addEventListener("hashchange", () => {
-            console.log(1231)
             this.setState({
+               location:{
                 ...this.state.location,
                 pathname: window.location.hash ? window.location.hash.slice(1) : '/',
+               }
             })
-            console.log(this.state)
+            console.log(JSON.stringify(this.state))
         })
     }
     render() {
-        
         let value = {
             ...this.state,
             history:{
