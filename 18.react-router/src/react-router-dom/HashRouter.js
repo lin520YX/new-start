@@ -24,6 +24,10 @@ export default class HashRouter extends React.Component {
             ...this.state,
             history:{
                 push(to){
+                    if(typeof to === 'object'){
+                        window.location.hash = to.pathname
+                        return;
+                    }
                     window.location.hash = to
                 }
             }
