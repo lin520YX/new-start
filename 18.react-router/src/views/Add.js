@@ -2,7 +2,8 @@ import React from 'react';
 export default class Add extends React.Component{
     input = React.createRef()
     handleClick=()=>{
-       let users = JSON.parse(localStorage.getItem('user'))||[];
+       let users = JSON.parse(localStorage.getItem('users'))||[];
+       console.log(users)
        users.push({id:Math.random(),name:this.input.current.value});
        localStorage.setItem('users',JSON.stringify(users))
        this.props.history.push('/user/list')

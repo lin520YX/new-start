@@ -9,6 +9,7 @@ export default class List extends React.Component{
         this.setState({
             lists
         })
+        console.log(lists)
     }
     render(){
         return <ul className='list-group'>
