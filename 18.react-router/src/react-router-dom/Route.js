@@ -10,17 +10,29 @@ export default class Route extends React.Component {
                     let { location: { pathname } } = value;
                     // console.log(JSON.stringify(value))
                     let props = { ...value, match: null }
-                    let { path = '/', component: Component, exact = false } = this.props
+                    let { path = '/', component: Component, exact = false, render ,children} = this.props
                     let keys = [];
                     let reg = pathToRegExp(path, keys, { end: exact })
                     if (reg.test(pathname)) {
                         let [, ...args] = pathname.match(reg)
                         keys.map(k => k.name)
-                        let params = keys.reduce((memo, key, index) => (memo[key] = args[index],memo), {})
+                        let params = keys.reduce((memo, key, index) => (memo[key] = args[index], memo), {})
                         props.match = params;
-                        return <Component {...props}></Component>
+                        if (Component) {
+                            return <Component {...props}></Component>
+                        } else if (render) {
+                            return render(props)
+                        }else if(children){
+                            return children(props)
+                        }
+
+                    }else{
+                        if(children){
+                            return children(props)
+                        }
+                        return null
                     }
-                    return null
+                    
                 }}
             </Consumer>
         )
