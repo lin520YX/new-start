@@ -13,6 +13,7 @@ export default class User extends React.Component {
                         <li><Link to='/user/list'>用户列表</Link></li>
                     </nav>
                 </div>
+                
                 <div className='col-md-9'>
                     <Route path='/user/add' component={Add}></Route>
                     <Route path='/user/list' component={List}></Route>
