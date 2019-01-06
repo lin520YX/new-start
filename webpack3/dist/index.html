@@ -7,6 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <script>
+        let xhr = new XMLHttpRequest()
+        xhr.open('get','/api/user',true);
+        xhr.on('load',function(){
+            console.log(xhr.response)
+        })
+        xhr.send()
+        </script>
 <script type="text/javascript" src="bundle.[hash.8].js"></script></body>
 </html>

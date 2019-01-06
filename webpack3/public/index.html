@@ -7,6 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <script>
+        let xhr = new XMLHttpRequest()
+        xhr.open('get','/api/user',true);
+        xhr.onload=function(){
+            console.log(xhr.response)
+        }
+        xhr.send()
+        </script>
 </body>
 </html>

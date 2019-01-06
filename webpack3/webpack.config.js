@@ -1,5 +1,6 @@
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let path = require('path');
+let CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports={
     mode:'development',
     entry:{
@@ -42,8 +43,28 @@ module.exports={
         ]
     },
     plugins:[
+        // new CleanWebpackPlugin('./dist'),
         new HtmlWebpackPlugin({
             template:'./public/index.html'
         })
-    ]
+    ],
+    devServer:{
+        // mock
+        before(app){
+            app.get('/api/user',function(req,res){
+                res.json({'name':'lyf'})
+            })
+        },
+        // proxy:{
+        //     '/api':{
+        //         target:'http://localhost:3000',
+        //         pathRewrite:{
+        //             '/api':''
+        //         }
+        //     }
+        // }
+    }
 }
+
+//前端有个服务8080  服务端3000
+// webpack-dev-server  内置express http-proxy-middleware
