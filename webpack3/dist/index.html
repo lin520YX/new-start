@@ -9,11 +9,11 @@
 <body>
     <script>
         let xhr = new XMLHttpRequest()
-        xhr.open('get','/api/user',true);
-        xhr.on('load',function(){
+        xhr.open('get','/user',true);
+        xhr.onload=function(){
             console.log(xhr.response)
-        })
+        }
         xhr.send()
         </script>
-<script type="text/javascript" src="bundle.[hash.8].js"></script></body>
+<script type="text/javascript" src="bundle.a46e4fbf.js"></script></body>
 </html>
