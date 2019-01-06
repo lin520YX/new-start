@@ -1,10 +1,21 @@
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let path = require('path');
 let CleanWebpackPlugin = require('clean-webpack-plugin');
+let CopyWebackPlugin = require('copy-webpack-plugin')
 module.exports={
     mode:'development',
     entry:{
         bundle:'./src/index.js'
+    },
+    resolve:{ //commonjs查找路径
+        modules:[path.resolve('node_modules')],
+        extensions:['.js','.json','.css'],
+        mainFields:['main','browser'],
+        mainField:['index.js'],
+        alias:{
+            // 别名
+            bootstrap:'bootstrap/dist/css/bootstrap.css'
+        }
     },
     output:{
         filename:'[name].[hash:8].js',
@@ -43,10 +54,15 @@ module.exports={
         ]
     },
     plugins:[
+        
         // new CleanWebpackPlugin('./dist'),
         new HtmlWebpackPlugin({
             template:'./public/index.html'
-        })
+        }),
+        // new CopyWebackPlugin({
+        //     from:'xxx/xxx',
+        //     to:path.resolve(__dirname,'dist')
+        // }),
     ],
     devServer:{
         // mock
@@ -65,6 +81,7 @@ module.exports={
         // }
     }
 }
-
+// copy-webpack-plugin
+//  静态资源拷贝
 //前端有个服务8080  服务端3000
 // webpack-dev-server  内置express http-proxy-middleware
