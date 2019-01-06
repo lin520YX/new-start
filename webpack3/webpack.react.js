@@ -6,14 +6,14 @@ module.exports={
     },
     output:{
         filename:'_dll_[name].js', //打包后文件的名字
-        path:path.resolve(__dirname,'dist'),
+        path:path.resolve(__dirname,'dista'),
         libraryTarget:'var',
         library:'_dll_[name]'
     },
     plugins:[
         new DllPlugin({
             name:'_dll_[name]',
-            path:path.resolve(__dirname,'dist','mainfest.json')
+            path:path.resolve(__dirname,'dista','mainfest.json')
         })
     ]
 }

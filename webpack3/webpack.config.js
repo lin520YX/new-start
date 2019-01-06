@@ -3,6 +3,7 @@ let path = require('path');
 let CleanWebpackPlugin = require('clean-webpack-plugin');
 let CopyWebackPlugin = require('copy-webpack-plugin')
 let Webpack = require('webpack')
+let ReferencePlugin = require('webpack/lib/DllReferencePlugin')
 module.exports={
     mode:'development',
     entry:{
@@ -62,6 +63,9 @@ module.exports={
         new HtmlWebpackPlugin({
             template:'./public/index.html'
         }),
+        new ReferencePlugin({
+            manifest:path.resolve(__dirname,'dista','mainfest.json')
+        })
         // new Webpack.DefinePlugin({
         //     PRODUCTION:JSON.stringify('dev')
         // })
