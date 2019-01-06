@@ -50,11 +50,11 @@ module.exports={
     ],
     devServer:{
         // mock
-        before(app){
-            app.get('/api/user',function(req,res){
-                res.json({'name':'lyf'})
-            })
-        },
+        // before(app){
+        //     app.get('/api/user',function(req,res){
+        //         res.json({'name':'lyf'})
+        //     })
+        // },
         // proxy:{
         //     '/api':{
         //         target:'http://localhost:3000',
