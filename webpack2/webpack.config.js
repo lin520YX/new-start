@@ -8,7 +8,7 @@ module.exports = {
         minimizer: [
             new UglifyWebpackPlugin({
                 cache: true,
-                parallel: trye
+                parallel: true
             }),
             new OptimizeCssAssetsPlugin({
             })
