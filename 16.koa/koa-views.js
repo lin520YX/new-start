@@ -22,13 +22,6 @@ function views(p, opts) {
     }
 }
 
-
-
-
-
-
-
-
 app.use(views(path.join(__dirname), {
     map: {
         html: 'ejs'
