@@ -1,13 +1,15 @@
 import React,{Component,Fragment} from 'react'
 import HomeHeader from './components/HomeHeader/index';
 import { connect } from 'react-redux';
-
-export default class Home extends Component{
+import actions from '@/store/actions/home'
+class Home extends Component{
     render(){
         return(
             <Fragment>
-                <HomeHeader/>
+                <HomeHeader currentCategory={this.props.currentCategory}
+                    setCurrentCategory={this.props.setCurrentCategory}/>
             </Fragment>
         )
     }
 }
+export default connect(state => state.home,actions)(Home)

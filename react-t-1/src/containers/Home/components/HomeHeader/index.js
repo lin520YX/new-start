@@ -26,10 +26,8 @@ export default class HomeHeader extends Component{
                             timeout={500}
                             classNames="fade"
                               ><ul className="menu-list">
-                                    <li type="1">Node课程培训</li>
-                                    <li type="2">HTML课程培训</li>
-                                    <li type="3">视频课程</li>
-                                    <li type="4">文档课件</li>
+                                    <li type="1">视频课程</li>
+                                    <li type="2">文档课件</li>
                                 </ul></CSSTransition>
                         }
                 </TransitionGroup>    
