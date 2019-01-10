@@ -1,11 +1,12 @@
 import * as types from '../action-type';
 let initState={
-    currentCategory : 0
+    currentLesson : 0
 }
 export default function (state=initState,action) {
     switch (action.type) {
-        case types.SET_CURRENT_CATEGORY:
-            return {...state,currentCategory:action.currentCategory};
+        case types.SET_CURRENT_LESSON:
+            console.log(action)
+            return {...state,currentLesson:action.val};
     }
     return state;
 }

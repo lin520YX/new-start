@@ -1,15 +1,18 @@
 import React,{Component,Fragment} from 'react'
 import HomeHeader from './components/HomeHeader/index';
 import { connect } from 'react-redux';
-import actions from '@/store/actions/home'
+import * as actions from '@/store/actions/home'
 class Home extends Component{
+    chooseLesson=(type)=>{
+        this.props.setCurrentLesson(type)
+        console.log(this.props)
+    }    
     render(){
         return(
             <Fragment>
-                <HomeHeader currentCategory={this.props.currentCategory}
-                    setCurrentCategory={this.props.setCurrentCategory}/>
+                <HomeHeader chooseLesson={this.chooseLesson}/>
             </Fragment>
         )
     }
 }
-export default connect(state => state.home,actions)(Home)
+export default connect(state => ({...state}),actions)(Home)

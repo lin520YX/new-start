@@ -6,6 +6,7 @@ import Mime from './containers/Mime';
 import Profile from './containers/Profile';
 import Layout from './containers/Layout/index';
 import store from './store';
+window._store = store;
 import { Provider } from 'react-redux';
 ReactDOM.render(
     <Provider store={store}>
