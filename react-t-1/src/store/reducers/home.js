@@ -9,5 +9,6 @@ export default function (state=initState,action) {
             console.log(action)
             return {...state,currentLesson:action.val};
     }
+    
     return state;
 }
